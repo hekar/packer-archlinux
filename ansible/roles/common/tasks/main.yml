@@ -1,0 +1,10 @@
+---
+- name: Upgrade entire system
+  community.general.pacman:
+    upgrade: yes
+
+- name: Install common packages
+  community.general.pacman:
+    name: "{{ item }}"
+    state: latest
+  loop: "{{ common_packages }}"

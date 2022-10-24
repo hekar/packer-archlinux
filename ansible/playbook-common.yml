@@ -1,0 +1,7 @@
+---
+- name: configure common
+  hosts: localhost
+  gather_facts: True
+  become: true
+  roles:
+    - common
