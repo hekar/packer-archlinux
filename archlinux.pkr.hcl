@@ -16,7 +16,7 @@ variable "disk_size" {
 
 variable "headless" {
   type    = string
-  default = "false"
+  default = "true"
 }
 
 variable "iso_checksum" {
@@ -54,11 +54,7 @@ source "qemu" "archlinux" {
   boot_command           = [
     "<enter>",
     "<wait10><wait10><wait10>",
-    "cd /<enter><wait>",
-    "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/arch/user_credentials.json<enter><wait5>",
-    "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/arch/user_configuration.json<enter><wait5>",
-    "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/arch/user_disk_layout.json<enter><wait5>",
-    "archinstall --config user_configuration.json --creds user_credentials.json --disk_layout user_disk_layout.json --silent && systemctl reboot<enter>"
+    "cd / && curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/arch/user_credentials.json && curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/arch/user_configuration.json && curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/arch/user_disk_layout.json && archinstall --config user_configuration.json --creds user_credentials.json --disk_layout user_disk_layout.json --silent && chroot /mnt/archinstall systemctl enable sshd && chroot /mnt/archinstall sed -i 's/ALL$/NOPASSWD:ALL/' /etc/sudoers.d/00_user && systemctl reboot<enter>",
   ]
   boot_wait              = "1s"
   disk_cache             = "none"
@@ -91,7 +87,7 @@ build {
   sources = ["source.qemu.archlinux"]
 
   provisioner "shell" {
-    execute_command = "{{ .Vars }} sudo -E bash '{{ .Path }}'"
+    execute_command = "{{ .Vars }} bash '{{ .Path }}'"
     inline          = [
       "sudo pacman --noconfirm -Syu ansible ansible-core",
       "ansible-galaxy collection install community.general"

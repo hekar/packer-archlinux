@@ -33,11 +33,16 @@
         "openssh",
         "docker",
         "docker-compose",
+        "vim",
         "zsh"
     ],
     "profile": {
-        "path": "/usr/lib/python3.10/site-packages/archinstall/profiles/kde.py"
+        "path": "/usr/lib/python3.10/site-packages/archinstall/profiles/server.py"
     },
+    "servers": [
+        "docker",
+        "sshd"
+    ],
     "script": "guided",
     "silent": true,
     "version": "2.5.1"
