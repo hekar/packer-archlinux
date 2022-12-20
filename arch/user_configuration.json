@@ -1,5 +1,4 @@
 {
-    "archinstall-language": "English",
     "sys-language": "en_US",
     "sys-encoding": "UTF-8",
     "keyboard-layout": "us",
@@ -9,9 +8,6 @@
     "audio": "pipewire",
     "timezone": "UTC",
     "ntp": true,
-    "parallel downloads": true,
-    "config_version": "2.5.1",
-    "debug": false,
     "harddrives": [
         "/dev/vda"
     ],
@@ -27,7 +23,6 @@
         "type": "nm"
     },
     "no_pkg_lookups": false,
-    "offline": false,
     "packages": [
         "git",
         "openssh",
@@ -35,15 +30,5 @@
         "docker-compose",
         "vim",
         "zsh"
-    ],
-    "profile": {
-        "path": "/usr/lib/python3.10/site-packages/archinstall/profiles/server.py"
-    },
-    "servers": [
-        "docker",
-        "sshd"
-    ],
-    "script": "guided",
-    "silent": true,
-    "version": "2.5.1"
+    ]
 }

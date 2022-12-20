@@ -21,12 +21,12 @@ variable "headless" {
 
 variable "iso_checksum" {
   type    = string
-  default = "sha256:17fe2053a114f2002efed53b39f740dd9778f5b689c9467a310b2649a80a6bfd"
+  default = "sha256:de301b9f18973e5902b47bb00380732af38d8ca70084b573ae7cf36a818eb84c"
 }
 
 variable "iso_url" {
   type    = string
-  default = "https://mirror.csclub.uwaterloo.ca/archlinux/iso/2022.10.01/archlinux-x86_64.iso"
+  default = "https://mirror.csclub.uwaterloo.ca/archlinux/iso/2022.12.01/archlinux-x86_64.iso"
 }
 
 variable "name" {
@@ -49,12 +49,17 @@ variable "ssh_username" {
   default = "user"
 }
 
+variable "installer_script" {
+  type    = string
+  default = "default_setup.sh"
+}
+
 source "qemu" "archlinux" {
   accelerator            = "kvm"
   boot_command           = [
     "<enter>",
     "<wait10><wait10><wait10>",
-    "cd / && curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/arch/user_credentials.json && curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/arch/user_configuration.json && curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/arch/user_disk_layout.json && archinstall --config user_configuration.json --creds user_credentials.json --disk_layout user_disk_layout.json --silent && chroot /mnt/archinstall systemctl enable sshd && chroot /mnt/archinstall sed -i 's/ALL$/NOPASSWD:ALL/' /etc/sudoers.d/00_user && systemctl reboot<enter>",
+    "curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/arch/${var.installer_script} && chmod +x ${var.installer_script} && ./${var.installer_script} -i {{ .HTTPIP }} -p {{ .HTTPPort }}<enter>"
   ]
   boot_wait              = "1s"
   disk_cache             = "none"
